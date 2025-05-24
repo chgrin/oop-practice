@@ -17,7 +17,7 @@
         border-radius: 5px;
         margin: 20px 0;
       }
-      #display {
+      .display {
         font-size: 24px;
         margin-bottom: 10px;
         padding: 10px;
@@ -31,12 +31,17 @@
         min-height: 24px;
         padding: 5px 10px;
       }
-      #history {
+      .history {
         margin-top: 20px;
         padding: 10px;
         background: #f9f9f9;
         border-radius: 3px;
         min-height: 100px;
+        list-style-type: disclosure-closed;
+        list-style-position: inside;
+      }
+      .history:not(:has(:first-child)) {
+        display: none;
       }
       .history-item {
         padding: 5px;
@@ -85,28 +90,53 @@
   <body>
     <a href="/index.html" class="back-link">← Назад к списку</a>
     <h1>Процедурный подход</h1>
-    <div class="calculator">
-      <div id="expression" class="expression"></div>
-      <div id="display">0</div>
+    <div id="calc1" class="calculator">
+      <div id="calc1-expression" class="expression"></div>
+      <div id="calc1-display" class="display">0</div>
       <div class="buttons">
-        <button id="num7">7</button>
-        <button id="num8">8</button>
-        <button id="num9">9</button>
-        <button id="divideButton">/</button>
-        <button id="num4">4</button>
-        <button id="num5">5</button>
-        <button id="num6">6</button>
-        <button id="subtractButton">-</button>
-        <button id="num1">1</button>
-        <button id="num2">2</button>
-        <button id="num3">3</button>
-        <button id="addButton">+</button>
-        <button id="num0">0</button>
-        <button id="clearButton">C</button>
-        <button id="equalsButton">=</button>
-
+        <button id="calc1-num7">7</button>
+        <button id="calc1-num8">8</button>
+        <button id="calc1-num9">9</button>
+        <button id="calc1-divideButton">/</button>
+        <button id="calc1-num4">4</button>
+        <button id="calc1-num5">5</button>
+        <button id="calc1-num6">6</button>
+        <button id="calc1-subtractButton">-</button>
+        <button id="calc1-num1">1</button>
+        <button id="calc1-num2">2</button>
+        <button id="calc1-num3">3</button>
+        <button id="calc1-addButton">+</button>
+        <button id="calc1-num0">0</button>
+        <button id="calc1-clearButton">C</button>
+        <button id="calc1-equalsButton">=</button>
+        <button id="calc1-multiplyButton">*</button>
       </div>
+      <ul id="calc1-history" class="history"></ul>
+    </div>
+
+    <div id="calc2" class="calculator">
+      <div id="calc2-expression" class="expression"></div>
+      <div id="calc2-display" class="display">0</div>
+      <div class="buttons">
+        <button id="calc2-num7">7</button>
+        <button id="calc2-num8">8</button>
+        <button id="calc2-num9">9</button>
+        <button id="calc2-divideButton">/</button>
+        <button id="calc2-num4">4</button>
+        <button id="calc2-num5">5</button>
+        <button id="calc2-num6">6</button>
+        <button id="calc2-subtractButton">-</button>
+        <button id="calc2-num1">1</button>
+        <button id="calc2-num2">2</button>
+        <button id="calc2-num3">3</button>
+        <button id="calc2-addButton">+</button>
+        <button id="calc2-num0">0</button>
+        <button id="calc2-clearButton">C</button>
+        <button id="calc2-equalsButton">=</button>
+        <button id="calc2-multiplyButton">*</button>
+      </div>
+      <ul id="calc2-history" class="history"></ul>
     </div>
     <script type="module" src="./main.ts"></script>
   </body>
-</html> 
+</html>
