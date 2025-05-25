@@ -1,4 +1,4 @@
-import { injectCss } from './utils';
+import { createElementFromHTML, injectCss } from './utils';
 
 type LogRecord = {
   firstOperand: number;
@@ -18,10 +18,6 @@ export class CalculatorHistory {
     const root = document.createElement('ul');
     root.classList.add('calculator_history');
     return root;
-  }
-
-  private log(historyItem: HTMLLIElement) {
-    this.root.append(historyItem);
   }
 
   private initCss() {
@@ -63,18 +59,43 @@ export class CalculatorHistory {
     );
   }
 
+  private renderRecord({ firstOperand, operator, secondOperand, result }: LogRecord, modif: string) {
+    const historyItem = createElementFromHTML(
+      `<li class="calculator_history-item ${modif}">
+				${firstOperand} ${operator} ${secondOperand} = ${result}
+			</li>`
+    );
+
+    this.root.append(historyItem);
+  }
+
   public renderTo(container: Element) {
     this.initCss();
     container.append(this.root);
   }
 
-  public createRecord({ firstOperand, operator, secondOperand, result }: LogRecord, operationType: string) {
-    const historyItem = document.createElement('li');
-    historyItem.classList.add('calculator_history-item', operationType);
+  public logOperation(record: LogRecord) {
+    let modif: string = '';
 
-    const historyRecord = `${firstOperand} ${operator} ${secondOperand} = ${result}`;
-    historyItem.textContent = historyRecord;
+    switch (record.operator) {
+      case '+':
+        modif = 'add';
+        break;
+      case '-':
+        modif = 'subtract';
+        break;
+      case '*':
+        modif = 'multiply';
+        break;
+      case '/':
+        modif = 'divide';
+        break;
+    }
 
-    this.log(historyItem);
+    this.renderRecord(record, modif);
+  }
+
+  public logErrorOperation(record: LogRecord) {
+    this.renderRecord(record, 'error');
   }
 }

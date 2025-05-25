@@ -39,42 +39,33 @@ export class CalculatorModel {
       switch (this.operator) {
         case '+':
           result = this.firstOperand + this.secondOperand;
-          this.history.createRecord({ firstOperand: this.firstOperand, operator: this.operator, secondOperand: this.secondOperand, result }, 'add');
           break;
         case '-':
           result = this.firstOperand - this.secondOperand;
-          this.history.createRecord(
-            { firstOperand: this.firstOperand, operator: this.operator, secondOperand: this.secondOperand, result },
-            'subtract'
-          );
           break;
         case '/':
           if (this.secondOperand === 0) {
-            this.history.createRecord(
-              { firstOperand: this.firstOperand, operator: this.operator, secondOperand: this.secondOperand, result: Infinity },
-              'error'
-            );
+            this.history.logErrorOperation({
+              firstOperand: this.firstOperand,
+              operator: this.operator,
+              secondOperand: this.secondOperand,
+              result: Infinity,
+            });
             alert('На Ноль не делим');
             this.clear();
             return;
           }
 
           result = this.firstOperand / this.secondOperand;
-          this.history.createRecord(
-            { firstOperand: this.firstOperand, operator: this.operator, secondOperand: this.secondOperand, result },
-            'divide'
-          );
           break;
         case '*':
           result = this.firstOperand * this.secondOperand;
-          this.history.createRecord(
-            { firstOperand: this.firstOperand, operator: this.operator, secondOperand: this.secondOperand, result },
-            'multiply'
-          );
           break;
         default:
           return;
       }
+
+      this.history.logOperation({ firstOperand: this.firstOperand, operator: this.operator, secondOperand: this.secondOperand, result });
 
       this.firstOperand = result;
       this.operator = null;
