@@ -1,29 +1,32 @@
-import type { CalculatorDisplay } from "./calculator-display";
-import type { CalculatorExpression } from "./calculator-expression";
-import type { CalculatorHistory } from "./calculator-history";
+import type { CalculatorDisplay } from './calculator-display';
+import type { CalculatorExpression } from './calculator-expression';
+import type { CalculatorHistory } from './calculator-history';
+
+export type Operators = '+' | '-' | '*' | '/';
+type ValidationResult = {
+  isValid: boolean;
+  values?: { first: number; second: number; op: Operators };
+  errors: string[];
+};
 
 export class CalculatorModel {
   private firstOperand: number | null = null;
-  private operator: string | null = null;
+  private operator: Operators | null = null;
   private secondOperand: number | null = null;
 
-  constructor(
-    private display: CalculatorDisplay,
-    private expresssion: CalculatorExpression,
-    private history: CalculatorHistory
-  ) {}
+  constructor(private display: CalculatorDisplay, private expresssion: CalculatorExpression, private history: CalculatorHistory) {}
 
   public addDigit(digitText: string) {
     if (this.operator === null) {
-      this.firstOperand = parseInt(`${this.firstOperand ?? ""}${digitText}`);
+      this.firstOperand = parseInt(`${this.firstOperand ?? ''}${digitText}`);
       this.display.setNumber(this.firstOperand);
     } else {
-      this.secondOperand = parseInt(`${this.secondOperand ?? ""}${digitText}`);
+      this.secondOperand = parseInt(`${this.secondOperand ?? ''}${digitText}`);
       this.display.setNumber(this.secondOperand);
     }
   }
 
-  public addOperator(operatorText: string) {
+  public addOperator(operatorText: Operators) {
     if (this.firstOperand && this.operator && this.secondOperand) {
       this.processCaclucation();
       this.addOperator(operatorText);
@@ -37,44 +40,63 @@ export class CalculatorModel {
     }
   }
 
-  public processCaclucation() {
-    if (
-      this.firstOperand !== null &&
-      this.operator &&
-      this.secondOperand !== null
-    ) {
-      let result: number;
-      switch (this.operator) {
-        case "+":
-          result = this.firstOperand + this.secondOperand;
-          break;
-        case "-":
-          result = this.firstOperand - this.secondOperand;
-          break;
-        case "/":
-          result = this.firstOperand / this.secondOperand;
-          break;
-        case "*":
-          result = this.firstOperand / this.secondOperand;
-          break;
-        default:
-          return;
-      }
+  public validateExpression(): ValidationResult {
+    const errors: string[] = [];
 
-      this.history.addOperation(
-        this.firstOperand,
-        this.operator,
-        this.secondOperand,
-        result
-      );
+    if (this.firstOperand === null) errors.push('Отсутсвует первый операнд');
+    if (this.secondOperand === null) errors.push('Отсутсвует второй операнд');
+    if (this.operator === null) errors.push('Нужен оператор для вычисления');
 
-      this.firstOperand = result;
-      this.operator = null;
-      this.secondOperand = null;
-
-      this.display.setNumber(this.firstOperand);
-      this.expresssion.clear();
+    if (errors.length > 0) {
+      return { isValid: false, errors };
     }
+
+    return {
+      isValid: true,
+      values: {
+        first: this.firstOperand!,
+        second: this.secondOperand!,
+        op: this.operator!,
+      },
+      errors: [],
+    };
+  }
+
+  public processCaclucation() {
+    const validation = this.validateExpression();
+
+    if (!validation.isValid || !validation.values) {
+      return;
+    }
+
+    const { first, second, op } = validation.values;
+
+    let result: number;
+    switch (op) {
+      case '+':
+        result = first + second;
+        break;
+      case '-':
+        result = first - second;
+        break;
+      case '*':
+        result = first * second;
+        break;
+      case '/':
+        result = first / second;
+        break;
+      default:
+        return;
+    }
+
+    this.history.addOperation(first, op, second, result);
+
+    this.firstOperand = result;
+    this.operator = null;
+    this.secondOperand = null;
+
+    this.display.setNumber(this.firstOperand);
+    this.expresssion.clear();
   }
 
   public clear() {
