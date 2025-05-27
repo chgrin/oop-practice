@@ -1,19 +1,21 @@
-import { CalculatorButton } from "./button/calculator-button";
-import { ClearButton } from "./button/clear-button";
-import { NumberButton } from "./button/number-button";
-
-import { ProcessButton } from "./button/process-button";
-import { CalculatorDisplay } from "./calculator-display";
-import { CalculatorExpression } from "./calculator-expression";
-import { CalculatorHistory } from "./calculator-history";
-import { CalculatorModel } from "./calculator-model";
-import { AddButton } from "./operators/AddOperator";
-import { CosButton } from "./operators/CosOperator";
-import { DivideButton } from "./operators/DivideOperator";
-import { MultiplyButton } from "./operators/MultiplyOperator";
-import { PowButton } from "./operators/PowOperator";
-import { SubscractButton } from "./operators/SubscractOperator";
-import { injectCss } from "./utils";
+import { CalculatorButton } from './button/calculator-button';
+import { ClearButton } from './button/clear-button';
+import { NumberButton } from './button/number-button';
+import { ProcessButton } from './button/process-button';
+import { CalculatorDisplay } from './calculator-display';
+import { CalculatorExpression } from './calculator-expression';
+import { CalculatorHistory } from './calculator-history';
+import { CalculatorModel } from './calculator-model';
+import { AddButton } from './operators/AddOperator';
+import { CosButton } from './operators/CosOperator';
+import { DivideButton } from './operators/DivideOperator';
+import { FactorialButton } from './operators/factorial-button';
+import { LogButton } from './operators/log-operator';
+import { MultiplyButton } from './operators/MultiplyOperator';
+import { PowButton } from './operators/PowOperator';
+import { SinButton } from './operators/sin-operator';
+import { SubscractButton } from './operators/SubscractOperator';
+import { injectCss } from './utils';
 
 class Calculator {
   private root: HTMLDivElement;
@@ -36,28 +38,32 @@ class Calculator {
     /* prettier-ignore */
     this.buttons = [
       // 1 row
-      new NumberButton("7", this.model),
-      new NumberButton("8", this.model),
-      new NumberButton("9", this.model),
+      new NumberButton('7', this.model),
+      new NumberButton('8', this.model),
+      new NumberButton('9', this.model),
       new DivideButton(this.model),
       // 2 row
-      new NumberButton("4", this.model),
-      new NumberButton("5", this.model),
-      new NumberButton("6", this.model),
+      new NumberButton('4', this.model),
+      new NumberButton('5', this.model),
+      new NumberButton('6', this.model),
       new MultiplyButton(this.model),
       // 3 row
-      new NumberButton("1", this.model),
-      new NumberButton("2", this.model),
-      new NumberButton("3", this.model),
+      new NumberButton('1', this.model),
+      new NumberButton('2', this.model),
+      new NumberButton('3', this.model),
       new SubscractButton(this.model),
       // 4 row
-      new NumberButton("0", this.model),
+      new NumberButton('0', this.model),
       new ClearButton(this.model),
       new ProcessButton(this.model),
       new AddButton(this.model),
       // 5 row
       new PowButton(this.model),
-      new CosButton(this.model)
+      new CosButton(this.model),
+      new SinButton(this.model),
+      new LogButton(this.model),
+      // 6 row
+      new FactorialButton(this.model)
     ];
 
     this.root = this.createRoot();
@@ -69,14 +75,14 @@ class Calculator {
   }
 
   private createRoot() {
-    const root = document.createElement("div");
-    root.classList.add("calculator");
+    const root = document.createElement('div');
+    root.classList.add('calculator');
 
     this.expression.renderTo(root);
     this.display.renderTo(root);
 
-    const buttonsContainer = document.createElement("div");
-    buttonsContainer.classList.add("calculator_buttons");
+    const buttonsContainer = document.createElement('div');
+    buttonsContainer.classList.add('calculator_buttons');
 
     this.buttons.forEach((button) => {
       button.renderTo(buttonsContainer);
@@ -106,7 +112,7 @@ class Calculator {
         margin: 10px 0;
       }
         `,
-      "calculator"
+      'calculator'
     );
   }
 }

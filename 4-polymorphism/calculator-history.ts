@@ -1,11 +1,7 @@
-import {
-  BaseCalculatorSubscriber,
-  type BiOperatorCalculatedEvent,
-  type UnOperatorCalculatedEvent,
-} from "./calculator-subscriber";
-import { type CalculatorSubscriber } from "./calculator-subscriber";
-import type { BiOperator, UnOperator } from "./operator";
-import { createElementFromHTML, injectCss } from "./utils";
+import { BaseCalculatorSubscriber, type BiOperatorCalculatedEvent, type UnOperatorCalculatedEvent } from './calculator-subscriber';
+import { type CalculatorSubscriber } from './calculator-subscriber';
+import type { BiOperator, UnOperator } from './operator';
+import { createElementFromHTML, injectCss } from './utils';
 
 export class CalculatorHistory {
   private root: HTMLDivElement;
@@ -20,11 +16,7 @@ export class CalculatorHistory {
     container.append(this.root);
   }
 
-  public addBiOperation(
-    firstOperand: number,
-    operator: BiOperator,
-    secondOperand: number
-  ) {
+  public addBiOperation(firstOperand: number, operator: BiOperator, secondOperand: number) {
     const historyItem = createElementFromHTML(/*html*/ `
       <div class="calculator_history-item ${operator.getHistoryClass()}">
         ${operator.getHistoryText(firstOperand, secondOperand)}
@@ -45,9 +37,9 @@ export class CalculatorHistory {
   }
 
   private createRoot() {
-    const root = document.createElement("div");
-    root.classList.add("calculator_history");
-    root.innerText = "";
+    const root = document.createElement('div');
+    root.classList.add('calculator_history');
+    root.innerText = '';
     return root;
   }
 
@@ -69,7 +61,7 @@ export class CalculatorHistory {
       .calculator_history-item.add {
         color: #2ecc71;
       }
-      .calculator_history-item.subtract {
+      .calculator_history-item.substract {
         color: #e74c3c;
       }
       .calculator_history-item.multiply {
@@ -83,25 +75,18 @@ export class CalculatorHistory {
         font-weight: bold;
       }
           `,
-      "calculator_history"
+      'calculator_history'
     );
   }
 }
 
-class HistorySubscriber
-  extends BaseCalculatorSubscriber
-  implements CalculatorSubscriber
-{
+class HistorySubscriber extends BaseCalculatorSubscriber implements CalculatorSubscriber {
   constructor(private history: CalculatorHistory) {
     super();
   }
 
   biOperatorCalculated(event: BiOperatorCalculatedEvent): void {
-    this.history.addBiOperation(
-      event.firstOperand,
-      event.operator,
-      event.secondOperand
-    );
+    this.history.addBiOperation(event.firstOperand, event.operator, event.secondOperand);
   }
 
   unOperatorCalculated(event: UnOperatorCalculatedEvent): void {
